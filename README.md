@@ -3,6 +3,8 @@
 ## Integrantes
 Cristian Camilo Garavito Díaz
 <br>
+<br>
+<br>
 
 ## Descripción del Proyecto
 El objetivo principal es construir un sistema inteligente para la detección automática de amenazas de ciberseguridad, específicamente enfocado en ataques de phishing y spam, utilizando arquitecturas de Machine Learning y conectando el motor de análisis a un servidor basado en Model Context Protocol.
