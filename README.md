@@ -15,7 +15,7 @@ El objetivo principal de **CYCLOPS** es reducir la carga operativa de los analis
 <br>
 
 ## Integrantes del Proyecto
-| Cristian Díaz |
+Cristian Díaz 
 
 ---
 <br>
