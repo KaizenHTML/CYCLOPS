@@ -12,24 +12,25 @@ Plataforma modular Enterprise para la detección proactiva de amenazas de cibers
 El objetivo principal de **CYCLOPS** es reducir la carga operativa de los analistas en centros de operaciones de seguridad mediante la automatización de la ingesta, análisis y categorización de eventos, permitiendo una integración futura con orquestadores de respuesta SOAR y XDR.
 
 ---
+<br>
 
 ## Integrantes del Proyecto
 
-| Nombre | Rol / Especialidad | Correo Electrónico |
+| Nombre | Rol |
 | :--- | :--- | :--- |
-| Cristian Díaz - crissmoon | Ingeniero de Software y Arquitecto de Ciberseguridad | correo@ejemplo.com |
-| Nombre del Integrante 2 | Rol en el Proyecto | correo2@ejemplo.com |
-| Nombre del Profesor | Docente Director o Revisor | docente@ejemplo.com |
+| Cristian Díaz | Arquitecto de Ciberseguridad |
 
 ---
+<br>
 
 ## Almacenamiento de Datos y Datasets
 
-El pipeline de ingesta y procesamiento de datos centraliza múltiples fuentes provenientes de plataformas especializadas como Kaggle. Para garantizar la reproducibilidad, auditoría y revisión docente sin sobrecargar el repositorio con archivos pesados, se cuenta con una estructura de almacenamiento organizada en las fases Raw, Unified, Processed y Scaled.
+El pipeline de ingesta y procesamiento de datos centraliza múltiples fuentes provenientes de plataformas especializadas como Kaggle. Para garantizar la reproducibilidad, auditoría y revisión docente sin sobrecargar el repositorio con archivos pesados, se cuenta con una estructura de almacenamiento organizada en las fases Raw, Unified, normalized y tokanization/lematization.
 
-* **Repositorio Oficial de Datasets en Google Drive:** [Enlace al Google Drive de Datasets](https://drive.google.com/drive/folders/tu_enlace_aqui)
+* **Repositorio Oficial de Datasets en Google Drive:** https://drive.google.com/drive/folders/1j3hjgW__ssZssPMRjrJVJT5CMo59T3YM?usp=sharing
 
 ---
+<br>
 
 ## Documentación Teórica y Base de Conocimiento - Notion
 
@@ -40,9 +41,10 @@ Como parte de la investigación aplicada para el desarrollo de **CYCLOPS**, se m
 * **Ciencia de Datos y Escalado:** Manejo de DataFrames, distribuciones, desviación estándar, valores atípicos y escalado robusto con RobustScaler.
 * **Privacidad y Seguridad de Datos:** Hashing de direcciones IP, anonimización y normalización de texto.
 
-* **Base de Conocimiento en Notion:** [Enlace a la Documentación en Notion](https://notion.so/tu_enlace_aqui)
+* **Base de Conocimiento en Notion:** https://app.notion.com/p/CYCLOPS-3e959de529f58051b74efe5d873eea90?source=copy_link.
 
 ---
+<br>
 
 ## Componentes del Sistema
 
@@ -53,6 +55,7 @@ Como parte de la investigación aplicada para el desarrollo de **CYCLOPS**, se m
 * **Artefactos Serializados - models:** Almacenamiento en disco de transformadores y clasificadores congelados en formato pkl para su consumo inmediato en tiempo de ejecución.
 
 ---
+<br>
 
 ## Flujo Operativo del Sistema
 
