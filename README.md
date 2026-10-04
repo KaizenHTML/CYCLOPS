@@ -15,10 +15,7 @@ El objetivo principal de **CYCLOPS** es reducir la carga operativa de los analis
 <br>
 
 ## Integrantes del Proyecto
-
-| Nombre | Rol |
-| :--- | :--- | :--- |
-| Cristian Díaz | Arquitecto de Ciberseguridad |
+| Cristian Díaz |
 
 ---
 <br>
