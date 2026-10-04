@@ -1,0 +1,28 @@
+# Python and Virtual Environments
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+venv/
+
+# Environment Files and Secrets
+.env
+*.pem
+*.key
+
+# Large Datasets and Compiled Models
+*.csv
+*.pkl
+*.joblib
+!src/data_pipeline/sample_data.csv
+
+# Node and Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+
+# IDEs and Operating System
+.vscode/
+.idea/
+.DS_Store

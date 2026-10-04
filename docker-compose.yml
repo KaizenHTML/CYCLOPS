@@ -1,0 +1,22 @@
+services: # Postgres Alpine Container
+  postgres_db:
+    image: postgres:16-alpine
+    container_name: CYCLOPS_postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-cyclops_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-Cl0p3s_C1}
+      POSTGRES_DB: ${POSTGRES_DB:-cyclops_db}
+    ports:
+      - "${POSTGRES_PORT:-5435}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-cyclops_user} -d ${POSTGRES_DB:-cyclops_db}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
+    driver: local

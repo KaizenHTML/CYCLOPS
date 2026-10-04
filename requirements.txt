@@ -1,0 +1,22 @@
+# Backend Framework and Server
+fastapi>=0.110.0
+uvicorn[standard]>=0.28.0
+pydantic>=2.6.0
+pydantic-settings>=2.2.0
+
+# Database and ORM
+sqlalchemy>=2.0.28
+psycopg2-binary>=2.9.9
+alembic>=1.13.1
+
+# Machine Learning and Data
+pandas>=2.2.0
+numpy>=1.26.0
+scikit-learn>=1.4.0
+deep-translator>=1.11.4
+joblib>=1.3.2
+
+# Security and Utilities
+python-jose[cryptography]>=3.3.0
+passlib[bcrypt]>=1.7.4
+python-dotenv>=1.0.1
