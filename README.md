@@ -29,7 +29,7 @@ El pipeline de ingesta y procesamiento de datos centraliza múltiples fuentes pr
 ---
 <br>
 
-## Documentación Teórica y Base de Conocimiento - Notion
+## Base de Conocimiento - Notion
 
 Como parte de la investigación aplicada para el desarrollo de **CYCLOPS**, se mantiene una base de conocimiento viva en Notion. Esta documentación compila la fundamentación teórica, análisis de ciberseguridad, matemáticas aplicadas y conceptos clave utilizados a lo largo del proyecto, tales como:
 
@@ -50,6 +50,32 @@ Como parte de la investigación aplicada para el desarrollo de **CYCLOPS**, se m
 * **Capa de Infraestructura - infrastructure:** Conectores a bases de datos relacionales, repositorios y cargadores de modelos de Machine Learning.
 * **Módulo de Escalado de Datos:** Implementación de RobustScaler alineada a los principios de prevención de fuga de datos mediante la separación estricta Train y Test en proporción 80 a 20.
 * **Artefactos Serializados - models:** Almacenamiento en disco de transformadores y clasificadores congelados en formato pkl para su consumo inmediato en tiempo de ejecución.
+
+---
+<br>
+
+## Stack Tecnológico Principal
+
+### Frontend y Presentación
+* **Librería Principal:** React
+* **Lenguaje de Programación:** TypeScript
+* **Estilos y Componentes:** Tailwind CSS
+* **Gestión de Estado Global:** Zustand
+
+### Backend y Servicios API
+* **Lenguaje de Programación:** Python
+* **Framework Web:** FastAPI
+* **Validación de Datos:** Pydantic
+* **Procesamiento Asíncrono:** Background Tasks nativo de FastAPI
+
+### Capa de Inteligencia Artificial y Machine Learning
+* **Librería de Analítica:** Scikit-Learn
+* **Acondicionamiento de Métricas:** RobustScaler para control de valores atípicos
+* **Procesamiento de Lenguaje Natural:** Pipeline NLP para lematización y extracción de características
+
+### Almacenamiento y Persistencia
+* **Base de Datos Relacional:** PostgreSQL
+* **Control de Migraciones y Consultas:** SQLAlchemy y Alembic
 
 ---
 <br>
