@@ -3,6 +3,7 @@
 Plataforma modular Enterprise para la detección proactiva de amenazas de ciberseguridad, análisis de correo malicioso y respuesta automatizada ante incidentes mediante Machine Learning.
 
 ---
+<br>
 
 ## Descripción del Proyecto
 
