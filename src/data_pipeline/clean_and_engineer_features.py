@@ -9,7 +9,8 @@ import pandas as pd
 
 logging.basicConfig(
     level=logging.INFO,
-    format="%(asctime)s - %(levelname)s - %(message)s"
+    style="{",
+    format="{asctime} - {levelname} - {message}"
 )
 logger = logging.getLogger(__name__)
 
@@ -194,8 +195,10 @@ def process_dataset(
     print("Feature Engineering and NLP Summary")
     print("=" * 60)
     print(f"File generated:      {output_path}")
-    print(f"Total records:       {len(df)}")
-    print(f"Average Urgency:      {df['urgency_score'].mean():.4f}")
+    total_count = len(df)
+    avg_urg = round(float(df["urgency_score"].mean()), 4)
+    print(f"Total records:       {total_count}")
+    print(f"Average Urgency:      {avg_urg}")
     print("=" * 60 + "\n")
 
     return df

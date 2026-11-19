@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CYCLOPS SENTINEL</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+    <header class="site-header" style="display: flex; justify-content: space-between; align-items: center; padding: 18px 32px; background-color: #FFFFFF; border-bottom: 1px solid #DDE8F4; box-shadow: 0 2px 10px #9bbcdb14;">
+        <div style="text-align: left;">
+            <h1 style="font-size: 22px; font-weight: 800; letter-spacing: 1.5px; color: #2E75D3; margin: 0;">CYCLOPS SENTINEL</h1>
+            <span style="font-size: 12px; color: #64748B; font-weight: 600;">Escudo Autonomo de Deteccion de Phishing</span>
+        </div>
+        <div id="header-user-area" style="display: flex; align-items: center; gap: 12px;"></div>
+    </header>
+
+    <main class="main-container">
+
+        <nav class="nav-tabs">
+            <button class="tab-btn active" data-tab="tab-inbox">
+                Bandeja de Entrada Inteligente
+            </button>
+            <button class="tab-btn" data-tab="tab-inferencia">
+                Analizador Manual de Texto
+            </button>
+            <button class="tab-btn" data-tab="tab-soc">
+                Historial de Análisis del Usuario <span class="badge-counter" id="badge-soc-count">0</span>
+            </button>
+            
+        </nav>
+
+                <section id="tab-inbox" class="tab-panel active">
+            <div class="auth-hero-banner" id="auth-hero-banner">
+                <div class="auth-hero-info">
+                    <h2>Escudo Autonomo de Phishing para Gmail</h2>
+                    <p>Inspeccion automatica de correos electronicos en tiempo real sin friccion ni copia manual de texto. Conecta tu cuenta oficial de Google para auditar tu buzon de entrada de forma segura.</p>
+                </div>
+                <div class="auth-hero-actions">
+                    <a href="/auth/google" class="btn-google-connect" id="btn-hero-google">
+                        Conectar con mi Gmail
+                    </a>
+                    <button type="button" id="btn-refresh-inbox" class="btn-demo-toggle">
+                        Actualizar Buzon
+                    </button>
+                </div>
+            </div>
+
+            <div class="inbox-layout">
+                <div class="card" style="margin-bottom: 0;">
+                    <div class="card-title">
+                        <span>Bandeja de Entrada</span>
+                        <span class="badge-counter" id="inbox-source-badge">Cargando...</span>
+                    </div>
+                    <div class="inbox-list" id="inbox-list">
+                        <div class="empty-state">Cargando mensajes del buzon...</div>
+                    </div>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 24px;">
+
+                    <div class="reading-pane" id="reading-pane" style="margin-bottom: 0;">
+                        <div class="reading-header">
+                            <h2 class="reading-subject" id="reading-subject">Seleccione un correo para auditar</h2>
+                            <div class="reading-meta-row">
+                                <span id="reading-sender">Remitente: -</span>
+                                <span id="reading-date">Fecha: -</span>
+                            </div>
+                        </div>
+
+                        <div class="reading-body" id="reading-body">
+Haga clic sobre cualquiera de los correos de la bandeja para desplegar su contenido completo e iniciar la auditoria del escudo CYCLOPS en tiempo real.
+                        </div>
+
+                        <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
+                            <button type="button" id="btn-shield-eliminate" class="btn-shield-eliminate" style="max-width: 260px;">
+                                Borrar Correo de la Bandeja
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card" style="margin-bottom: 0;">
+                        <div class="card-title">
+                            <span>Panel de Extraccion de Metricas</span>
+                            <span class="badge-counter">Variables de Dominio</span>
+                        </div>
+
+                        <div class="metrics-grid">
+                            <div class="metric-tile">
+                                <div class="metric-key">Total de Caracteres</div>
+                                <div class="metric-value" id="inbox-val-char-count">-</div>
+                                <div class="metric-desc">Longitud total del mensaje</div>
+                            </div>
+                            <div class="metric-tile">
+                                <div class="metric-key">Enlaces Detectados</div>
+                                <div class="metric-value" id="inbox-val-url-count">-</div>
+                                <div class="metric-desc">Direcciones web encontradas</div>
+                            </div>
+                            <div class="metric-tile">
+                                <div class="metric-key">Contiene Enlaces</div>
+                                <div class="metric-value" id="inbox-val-has-url">-</div>
+                                <div class="metric-desc">Presencia de hipervinculos</div>
+                            </div>
+                            <div class="metric-tile">
+                                <div class="metric-key">Nivel de Urgencia</div>
+                                <div class="metric-value" id="inbox-val-urgency-score">-</div>
+                                <div class="metric-desc">Puntaje de coaccion calculado</div>
+                            </div>
+                            <div class="metric-tile">
+                                <div class="metric-key">Densidad de Enlaces</div>
+                                <div class="metric-value" id="inbox-val-url-density">-</div>
+                                <div class="metric-desc">Proporcion respecto al texto</div>
+                            </div>
+                            <div class="metric-tile">
+                                <div class="metric-key">Densidad de Urgencia</div>
+                                <div class="metric-value" id="inbox-val-urgency-density">-</div>
+                                <div class="metric-desc">Frecuencia de terminos de alerta</div>
+                            </div>
+                            <div class="metric-tile">
+                                <div class="metric-key">Veredicto del Sistema</div>
+                                <div class="metric-value" id="inbox-val-is-threat">-</div>
+                                <div class="metric-desc">Clasificacion del modelo</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card" style="margin-bottom: 0;">
+                        <div class="card-title">
+                            <span>Panel de Diagnostico Predictivo</span>
+                            <span class="badge-counter">Inferencia ML</span>
+                        </div>
+
+                        <div class="diagnostic-box">
+                            <div id="inbox-verdict-banner" class="verdict-banner" style="background-color: #F8FAFD; border-color: #DDE8F4; color: #64748B;">
+                                <div class="verdict-info">
+                                    <h3 id="inbox-verdict-title">Esperando Seleccion</h3>
+                                    <p id="inbox-verdict-desc">Seleccione un correo para desplegar su evaluacion.</p>
+                                </div>
+                                <div id="inbox-verdict-risk-pill" class="risk-pill" style="background-color: #E2E8F0; color: #475569;">
+                                    INACTIVO
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="progress-labels">
+                                    <span>Probabilidad de Amenaza Calculada</span>
+                                    <span id="inbox-prob-value-text">0.0%</span>
+                                </div>
+                                <div class="progress-track">
+                                    <div id="inbox-prob-progress-fill" class="progress-fill" style="width: 0%; background-color: #CBD5E1;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section id="tab-inferencia" class="tab-panel">
+            <div style="max-width: 980px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px;">
+
+                <div class="card" style="margin-bottom: 0;">
+                    <div class="card-title">
+                        <span>Ingesta de Mensaje Sospechoso</span>
+                        <span class="badge-counter">Analizador L1</span>
+                    </div>
+
+                    <textarea id="email-text-input" class="text-area-input" placeholder="Pegue aqui el texto del correo electronico o mensaje sospechoso para someterlo a analisis heuristico y clasificacion..."></textarea>
+
+                    <div class="action-row" style="display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 14px;">
+                        <span class="execution-pill" id="execution-time-label">Latencia: -</span>
+                        <div style="display: flex; gap: 10px;">
+                            <button type="button" id="btn-clear-text" class="btn-secondary btn-clear" style="padding: 10px 18px; border-radius: 10px; font-weight: 600; cursor: pointer;">Limpiar</button>
+                            <button type="button" id="btn-analyze-email" class="btn-primary-action" style="padding: 10px 22px; border-radius: 10px; font-weight: 700; cursor: pointer;">Ejecutar Analisis de Seguridad</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-bottom: 0;">
+                    <div class="card-title">
+                        <span>Panel de Extraccion de Metricas</span>
+                        <span class="badge-counter">Variables de Dominio</span>
+                    </div>
+
+                    <div class="metrics-grid">
+                        <div class="metric-tile">
+                            <div class="metric-key">Total de Caracteres</div>
+                            <div class="metric-value" id="val-char-count">-</div>
+                            <div class="metric-desc">Longitud total del mensaje</div>
+                        </div>
+                        <div class="metric-tile">
+                            <div class="metric-key">Enlaces Detectados</div>
+                            <div class="metric-value" id="val-url-count">-</div>
+                            <div class="metric-desc">Direcciones web encontradas</div>
+                        </div>
+                        <div class="metric-tile">
+                            <div class="metric-key">Contiene Enlaces</div>
+                            <div class="metric-value" id="val-has-url">-</div>
+                            <div class="metric-desc">Presencia de hipervinculos</div>
+                        </div>
+                        <div class="metric-tile">
+                            <div class="metric-key">Nivel de Urgencia</div>
+                            <div class="metric-value" id="val-urgency-score">-</div>
+                            <div class="metric-desc">Puntaje de coaccion calculado</div>
+                        </div>
+                        <div class="metric-tile">
+                            <div class="metric-key">Densidad de Enlaces</div>
+                            <div class="metric-value" id="val-url-density">-</div>
+                            <div class="metric-desc">Proporcion respecto al texto</div>
+                        </div>
+                        <div class="metric-tile">
+                            <div class="metric-key">Densidad de Urgencia</div>
+                            <div class="metric-value" id="val-urgency-density">-</div>
+                            <div class="metric-desc">Frecuencia de terminos de alerta</div>
+                        </div>
+                        <div class="metric-tile" id="tile-is-threat">
+                            <div class="metric-key">Veredicto del Sistema</div>
+                            <div class="metric-value" id="val-is-threat">-</div>
+                            <div class="metric-desc">Clasificacion del modelo</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-bottom: 0;">
+                    <div class="card-title">
+                        <span>Panel de Diagnostico Predictivo</span>
+                        <span class="badge-counter">Inferencia ML</span>
+                    </div>
+
+                    <div class="diagnostic-box">
+                        <div id="verdict-banner" class="verdict-banner" style="background-color: #F8FAFD; border-color: #DDE8F4; color: #64748B;">
+                            <div class="verdict-info">
+                                <h3 id="verdict-title">Esperando Analisis</h3>
+                                <p id="verdict-desc">Ingrese un correo para activar el motor.</p>
+                            </div>
+                            <div id="verdict-risk-pill" class="risk-pill" style="background-color: #E2E8F0; color: #475569;">
+                                INACTIVO
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="progress-labels">
+                                <span>Probabilidad de Amenaza Calculada</span>
+                                <span id="prob-value-text">0.0%</span>
+                            </div>
+                            <div class="progress-track">
+                                <div id="prob-progress-fill" class="progress-fill" style="width: 0%; background-color: #CBD5E1;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="tab-soc" class="tab-panel">
+            <div class="card">
+                <div class="card-title">
+                    <span>Historial de Correos Analizados por el Usuario</span>
+                    <span class="badge-counter">Registro de Consultas</span>
+                </div>
+
+                <p style="font-size: 14px; color: #64748B; margin-bottom: 20px; line-height: 1.6;">
+                    Registro cronologico de correos evaluados mediante el motor de aprendizaje automatico. Proporciona trazabilidad inmediata del veredicto y las recomendaciones preventivas para el usuario sin intermediacion de terceros.
+                </p>
+
+                <div class="data-table-container">
+                    <table class="custom-table">
+                        <thead>
+                            <tr>
+                                <th>ID Analisis</th>
+                                <th>Remitente Anonimizado</th>
+                                <th>Fecha y Hora</th>
+                                <th>Confianza IA</th>
+                                <th>Nivel Alerta</th>
+                                <th>Veredicto</th>
+                                <th>Recomendacion al Usuario</th>
+                            </tr>
+                        </thead>
+                        <tbody id="soc-incidents-tbody">
+                            <tr>
+                                <td colspan="7" class="empty-state">Cargando historial de analisis del sistema...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        
+
+    </main>
+
+    <footer class="site-footer">
+        CYCLOPS SENTINEL
+    </footer>
+
+        <script src="/static/js/app.js"></script>
+</body>
+</html>

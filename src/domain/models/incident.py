@@ -27,4 +27,4 @@ class IncidentModel(Base):
     status = Column(String(50), default="PENDING_REVIEW")
 
     def __repr__(self):
-        return f"<Incident(id={self.id}, sender='{self.sender}', severity='{self.severity}')>"
+        return f"<Incident id={self.id} sender='{self.sender}' severity='{self.severity}'>"

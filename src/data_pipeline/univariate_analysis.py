@@ -33,7 +33,7 @@ resumen.index = [
     'Desv. Est.',
     'Mediana',
     'IQR',
-    'Asimetria (Skew)',
+    'Asimetria Skew',
     'Curtosis',
 ]
 

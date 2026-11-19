@@ -1,4 +1,4 @@
-# Python and Virtual Environments
+﻿# Python and Virtual Environments
 __pycache__/
 *.py[cod]
 *$py.class
@@ -14,7 +14,8 @@ venv/
 # Large Datasets and Compiled Models
 *.csv
 *.pkl
-*.joblib
+# *.joblib
+!models/*.joblib
 !src/data_pipeline/sample_data.csv
 
 # Node and Frontend

@@ -1,7 +1,0 @@
-{
-  "dependencies": {
-    "matplotlib": "^1.0.0",
-    "networkx": "^0.0.1-security",
-    "seaborn": "^0.0.1-security"
-  }
-}

@@ -166,7 +166,7 @@ def run_normalization(
 
 
     # Filtering Residual Texts
-    print(f"[-] Filtering empty or irrelevant texts (< {min_char_len} characters)...")
+    print(f"[-] Filtering empty or irrelevant texts - under {min_char_len} characters...")
     df_valid = df[df["char_count"] >= min_char_len].copy()
     dropped_empty = initial_rows - len(df_valid)
 
@@ -208,7 +208,8 @@ def run_normalization(
     print(f"Initial records         : {initial_rows:,}")
     print(f"Discarded for emptiness : {dropped_empty:,}")
     print(f"Duplicates removed      : {dropped_duplicates:,}")
-    print(f"Final records           : {final_rows:,} - Preserved: {round((final_rows/initial_rows)*100, 1)}%")
+    preserved_ratio = round(float(final_rows) / float(initial_rows) * 100.0, 1)
+    print(f"Final records           : {final_rows:,} - Preserved: {preserved_ratio}%")
     print(f"Total execution time    : {elapsed} seconds")
     print("-" * 70)
     print("Final distribution by source and label:")

@@ -57,7 +57,8 @@ def main():
 
     print("--------------------------------------------------")
     print(f"Unified dataset generated successfully in: {output_path}")
-    print(f"Total consolidated records: {len(unified_df)}")
+    total_recs = len(unified_df)
+    print(f"Total consolidated records: {total_recs}")
     print("Distribution by original source:")
     print(unified_df["source_dataset"].value_counts().to_string())
     print("--------------------------------------------------")
