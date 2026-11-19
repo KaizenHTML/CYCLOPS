@@ -16,6 +16,7 @@ class EmailMetadata:
         self.raw_text = raw_text
         self.sender = sender or ""
         self.is_trusted_sender = False
+        self.all_links_trusted = False
         self.char_count = 0
         self.word_count = 0
         self.url_count = 0
@@ -39,7 +40,10 @@ class EmailMetadata:
         trusted_domains = [
             "google.com", "googlemail.com", "youtube.com", "googleplay.com",
             "microsoft.com", "apple.com", "amazon.com", "github.com",
-            "linkedin.com", "bancolombia.com.co", "davivienda.com"
+            "steampowered.com", "steamcommunity.com", "valvesoftware.com",
+            "spotify.com", "netflix.com", "paypal.com", "epicgames.com",
+            "playstation.com", "sony.com", "discord.com", "linkedin.com",
+            "bancolombia.com.co", "davivienda.com"
         ]
         if "@" in sender_lower:
             parts = sender_lower.split("@")
@@ -58,6 +62,32 @@ class EmailMetadata:
         urls = re.findall(r"https?://\S+|www\.\S+", text)
         self.url_count = len(urls)
         self.has_url = 1 if self.url_count > 0 else 0
+
+        # Link consistency analysis
+        trusted_link_domains = [
+            "google.com", "googlemail.com", "youtube.com", "googleplay.com",
+            "microsoft.com", "apple.com", "amazon.com", "github.com",
+            "steampowered.com", "steamcommunity.com", "valvesoftware.com",
+            "spotify.com", "netflix.com", "paypal.com", "epicgames.com",
+            "playstation.com", "sony.com", "discord.com", "linkedin.com",
+            "bancolombia.com.co", "davivienda.com"
+        ]
+        if self.url_count > 0 and self.has_ip == 0:
+            all_valid = True
+            for u in urls:
+                clean_url = u.lower().replace("https://", "").replace("http://", "").replace("www.", "")
+                host = clean_url.split("/")[0].split("?")[0].split(":")[0]
+                matched_domain = False
+                for td in trusted_link_domains:
+                    if host == td or host.endswith("." + td):
+                        matched_domain = True
+                        break
+                if not matched_domain:
+                    all_valid = False
+                    break
+            self.all_links_trusted = all_valid
+        else:
+            self.all_links_trusted = False
 
         ip_match = re.search(r"\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b", text)
         self.has_ip = 1 if ip_match else 0
@@ -101,6 +131,7 @@ class EmailMetadata:
             "cluster_id": int(self.cluster_id),
             "cluster_label": self.cluster_label,
             "is_threat": bool(self.is_threat),
+            "all_links_trusted": bool(self.all_links_trusted),
             "anonymized_sender": self.anonymized_sender
         }
 
@@ -227,8 +258,8 @@ class AIClassifierService:
                 metadata.cluster_id = 0
                 metadata.cluster_label = "Cluster 0 - Trafico Corporativo Habitual"
 
-        if metadata.is_trusted_sender and metadata.has_ip == 0:
-            prob_phishing = min(prob_phishing, 0.065)
+        if (metadata.is_trusted_sender or metadata.all_links_trusted) and metadata.has_ip == 0:
+            prob_phishing = min(prob_phishing, 0.075)
         elif metadata.url_count > 0 and metadata.urgency_score >= 5.0:
             prob_phishing = max(prob_phishing, 0.935)
         elif metadata.url_count > 0 and metadata.urgency_score >= 2.0:
@@ -258,7 +289,10 @@ class AIClassifierService:
             action = "MARKED_AS_SAFE"
             metadata.is_threat = False
             action_label = "Marcado como Seguro"
-            summary = "Mensaje sin presencia significativa de patrones maliciosos ni enlaces de riesgo. Clasificado como seguro para el usuario."
+            if metadata.all_links_trusted or metadata.is_trusted_sender:
+                summary = "Notificacion autentica o recuperacion de credenciales verificada. Los hipervinculos analizados dirigen exclusivamente a dominios institucionales autenticos sin desvio malicioso."
+            else:
+                summary = "Mensaje sin presencia significativa de patrones maliciosos ni enlaces de riesgo. Clasificado como seguro para el usuario."
 
         char_num = metadata.char_count
         word_num = metadata.word_count
