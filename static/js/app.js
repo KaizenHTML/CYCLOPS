@@ -411,21 +411,6 @@ function initInboxEvents() {
     if (btnAnalyze) {
         btnAnalyze.onclick = runInboxEmailAnalysis;
     }
-})
-            .catch(function () {
-                alert("Accion de mitigacion ejecutada.");
-            });
-        };
-    }
-
-    const btnMarkSafe = document.getElementById("btn-shield-mark-safe");
-    if (btnMarkSafe) {
-        btnMarkSafe.onclick = function () {
-            alert("Correo confirmado como confiable por el usuario.");
-        };
-    }
-
-
 
     const btnRefresh = document.getElementById("btn-refresh-inbox");
     if (btnRefresh) {
@@ -632,6 +617,7 @@ function performAnalysis(text, analyzeBtn) {
         if (exTime) {
             exTime.innerText = "Latencia: " + data.execution_time_ms + " ms";
         }
+        fetchIncidents();
     })
     .catch(function () {
         if (analyzeBtn) {
