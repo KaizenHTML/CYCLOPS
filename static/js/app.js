@@ -586,14 +586,20 @@ function renderIncidentsTable(incidents) {
             statusBadge = '<span style="background-color: #D1FAE5; color: #065F46; padding: 4px 8px; border-radius: 9999px; font-weight: 700; font-size: 11px;">SEGURO</span>';
         }
 
-        let actionButtons = "-";
+        let userRecommendation = '<span style="color: #059669; font-weight: 600;">Lectura e interaccion segura</span>';
+        if (risk === "CRITICO") {
+            userRecommendation = '<span style="color: #DC2626; font-weight: 600;">Aislar mensaje y no abrir enlaces</span>';
+        } else if (risk === "MEDIO") {
+            userRecommendation = '<span style="color: #D97706; font-weight: 600;">Verificar remitente antes de responder</span>';
+        }
+
         if (inc.status === "PENDING_SOC_REVIEW" || inc.status === "PENDING_ANALYSIS") {
-            actionButtons = '<div style="display: flex; gap: 6px;"><button type="button" class="btn-action-small btn-threat-confirm soc-action-btn" data-incident-id="' + inc.id + '" data-action-type="CONFIRMED_THREAT">Aislar</button><button type="button" class="btn-action-small btn-safe-confirm soc-action-btn" data-incident-id="' + inc.id + '" data-action-type="FALSE_POSITIVE">Restaurar</button></div>';
+            userRecommendation += '<div style="display: flex; gap: 6px; margin-top: 6px;"><button type="button" class="btn-action-small btn-threat-confirm soc-action-btn" data-incident-id="' + inc.id + '" data-action-type="CONFIRMED_THREAT">Aislar</button><button type="button" class="btn-action-small btn-safe-confirm soc-action-btn" data-incident-id="' + inc.id + '" data-action-type="FALSE_POSITIVE">Restaurar</button></div>';
         }
 
         const sender = inc.metadata ? inc.metadata.anonymized_sender : "usuario@corporativo.com";
 
-        tr.innerHTML = '<td><strong>' + inc.id + '</strong></td><td>' + sender + '</td><td>' + inc.reported_at + '</td><td>' + conf + '</td><td>' + risk + '</td><td>' + statusBadge + '</td><td>' + actionButtons + '</td>';
+        tr.innerHTML = '<td><strong>' + inc.id + '</strong></td><td>' + sender + '</td><td>' + inc.reported_at + '</td><td>' + conf + '</td><td>' + risk + '</td><td>' + statusBadge + '</td><td>' + userRecommendation + '</td>';
         tbody.appendChild(tr);
     });
 }
