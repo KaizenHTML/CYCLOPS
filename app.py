@@ -179,14 +179,20 @@ def analyze():
     start_time = time.time()
     payload = request.get_json() or {}
     raw_text = payload.get("raw_text", "")
+    sender = payload.get("sender", "")
     reporter_id = payload.get("reporter_id", "emp.usr.001")
 
-    metadata = EmailMetadata(raw_text)
+    metadata = EmailMetadata(raw_text, sender=sender if sender else None)
     evaluation = classifier_service.predict(metadata)
 
     incident = Incident(raw_text, reporter_id, metadata, evaluation)
     incident.alert_level = evaluation["risk_level"]
-    incident.status = "ANALYZED"
+    if evaluation["risk_level"] == "CRITICO":
+        incident.status = "AUTO_MITIGATED_QUARANTINE"
+    elif evaluation["risk_level"] == "MEDIO":
+        incident.status = "PENDING_SOC_REVIEW"
+    else:
+        incident.status = "MARKED_AS_SAFE"
     history_service.add_incident(incident)
 
     elapsed_ms = round((time.time() - start_time) * 1000.0, 2)
