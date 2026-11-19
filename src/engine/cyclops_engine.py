@@ -17,6 +17,10 @@ class EmailMetadata:
         self.sender = sender or ""
         self.is_trusted_sender = False
         self.all_links_trusted = False
+        self.has_suspicious_link = False
+        self.threat_hits = []
+        self.mild_hits = []
+        self.assurance_hits = []
         self.char_count = 0
         self.word_count = 0
         self.url_count = 0
@@ -63,54 +67,69 @@ class EmailMetadata:
         self.url_count = len(urls)
         self.has_url = 1 if self.url_count > 0 else 0
 
-        # Link consistency analysis
+        text_lower = text.lower()
+
         trusted_link_domains = [
             "google.com", "googlemail.com", "youtube.com", "googleplay.com",
             "microsoft.com", "apple.com", "amazon.com", "github.com",
             "steampowered.com", "steamcommunity.com", "valvesoftware.com",
+            "computrabajo.com", "computrabajo.com.co", "elempleo.com", "indeed.com",
+            "platzi.com", "coursera.org", "duolingo.com",
             "spotify.com", "netflix.com", "paypal.com", "epicgames.com",
             "playstation.com", "sony.com", "discord.com", "linkedin.com",
             "bancolombia.com.co", "davivienda.com"
         ]
-        if self.url_count > 0 and self.has_ip == 0:
-            all_valid = True
-            for u in urls:
-                clean_url = u.lower().replace("https://", "").replace("http://", "").replace("www.", "")
-                host = clean_url.split("/")[0].split("?")[0].split(":")[0]
-                matched_domain = False
-                for td in trusted_link_domains:
-                    if host == td or host.endswith("." + td):
-                        matched_domain = True
-                        break
-                if not matched_domain:
-                    all_valid = False
+
+        self.has_suspicious_link = False
+        all_valid = len(urls) > 0
+        for u in urls:
+            u_clean = u.lower().replace("https://", "").replace("http://", "").replace("www.", "")
+            host = u_clean.split("/")[0].split("?")[0].split(":")[0]
+            
+            if any(bad in host for bad in [".xyz", ".top", ".tk", ".ru", ".click", ".buzz", ".work"]):
+                self.has_suspicious_link = True
+                all_valid = False
+            
+            matched = False
+            for td in trusted_link_domains:
+                if host == td or host.endswith("." + td):
+                    matched = True
                     break
-            self.all_links_trusted = all_valid
-        else:
-            self.all_links_trusted = False
+            if not matched:
+                all_valid = False
+
+        self.all_links_trusted = all_valid
 
         ip_match = re.search(r"\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b", text)
         self.has_ip = 1 if ip_match else 0
+        if self.has_ip:
+            self.has_suspicious_link = True
 
-        urgency_terms = [
-            "urgente", "urgencia", "inmediato", "inmediatamente", "suspension",
-            "suspendida", "suspender", "bloqueada", "bloqueo", "cuenta", "banco",
-            "bancaria", "seguridad", "verificar", "verificacion", "actualizar",
-            "credenciales", "clave", "contraseña", "password", "24 horas", "48 horas",
-            "expira", "vencimiento", "multa", "penalizacion", "confirmar",
-            "acceso", "restringido", "alerta", "critica", "haga clic", "clic aqui"
+        coercive_threats = [
+            "suspension definitiva", "cuenta suspendida", "bloqueo de cuenta", "cuenta bloqueada",
+            "sera suspendida", "sera bloqueada", "sera cerrada", "sera cancelada", "evitar el cierre",
+            "retencion de fondos", "actividad inusual", "actividad sospechosa", "acceso no autorizado",
+            "ultimo aviso", "plazo limite", "24 horas", "48 horas", "multa", "penalizacion",
+            "fondos seran retenidos", "inmediatamente o sera"
         ]
-        
-        text_lower = text.lower()
-        matched_score = 0.0
-        for term in urgency_terms:
-            if term in text_lower:
-                matched_score += 1.5
+        self.threat_hits = [t for t in coercive_threats if t in text_lower]
 
-        if self.url_count > 0 and matched_score > 0:
-            matched_score += 2.0
+        mild_urgency = ["urgente", "urgencia", "inmediato", "inmediatamente", "alerta critica"]
+        self.mild_hits = [m for m in mild_urgency if m in text_lower]
 
-        self.urgency_score = min(round(matched_score, 2), 10.0)
+        assurance_terms = [
+            "si no has solicitado", "si no solicitaste", "si no estas tratando",
+            "ignora este correo", "no respondas a este mensaje", "ofertas de empleo",
+            "hoja de vida", "postulacion", "vacante", "candidato", "todos los derechos reservados",
+            "politica de privacidad", "terminos y condiciones", "desuscribirse", "recibo de compra",
+            "confirmacion de pedido"
+        ]
+        self.assurance_hits = [a for a in assurance_terms if a in text_lower]
+
+        calc_urgency = len(self.threat_hits) * 3.5 + len(self.mild_hits) * 1.5
+        if self.has_suspicious_link and len(self.threat_hits) > 0:
+            calc_urgency += 3.0
+        self.urgency_score = min(round(calc_urgency, 2), 10.0)
 
         effective_words = max(self.word_count, 1)
         self.url_density = round(float(self.url_count) / float(effective_words) * 100.0, 2)
@@ -258,14 +277,17 @@ class AIClassifierService:
                 metadata.cluster_id = 0
                 metadata.cluster_label = "Cluster 0 - Trafico Corporativo Habitual"
 
-        if (metadata.is_trusted_sender or metadata.all_links_trusted) and metadata.has_ip == 0:
-            prob_phishing = min(prob_phishing, 0.075)
-        elif metadata.url_count > 0 and metadata.urgency_score >= 5.0:
-            prob_phishing = max(prob_phishing, 0.935)
-        elif metadata.url_count > 0 and metadata.urgency_score >= 2.0:
-            prob_phishing = max(prob_phishing, 0.685)
-        elif metadata.url_count == 0 and metadata.urgency_score <= 1.5:
-            prob_phishing = min(prob_phishing, 0.125)
+        # Multi-layer semantic decision matrix
+        if metadata.has_suspicious_link and (len(metadata.threat_hits) > 0 or len(metadata.mild_hits) > 0):
+            prob_phishing = 0.999
+        elif len(metadata.threat_hits) >= 2:
+            prob_phishing = max(prob_phishing, 0.950)
+        elif metadata.is_trusted_sender or metadata.all_links_trusted or (len(metadata.assurance_hits) > 0 and len(metadata.threat_hits) == 0):
+            prob_phishing = min(prob_phishing, 0.065)
+        elif len(metadata.threat_hits) == 1 and len(metadata.assurance_hits) == 0:
+            prob_phishing = max(prob_phishing, 0.650)
+        elif metadata.urgency_score == 0 and not metadata.has_suspicious_link:
+            prob_phishing = min(prob_phishing, 0.080)
 
         confidence_pct = round(prob_phishing * 100.0, 1)
 
@@ -275,14 +297,14 @@ class AIClassifierService:
             action = "USER_ALERT_HIGH"
             metadata.is_threat = True
             action_label = "Amenaza Critica - Bloqueo Inmediato"
-            summary = "Amenaza de phishing detectada con alta probabilidad. El mensaje contiene hipervinculos y multiples inductores de urgencia coercitiva. Se recomienda al usuario eliminar el correo y no interactuar con sus enlaces."
+            summary = "Amenaza de phishing detectada por coaccion agresiva o hipervinculos sospechosos disenados para suplantar identidades."
         elif prob_phishing >= 0.40:
             classification = "PHISHING SOSPECHOSO"
             risk_level = "MEDIO"
             action = "USER_ALERT_CAUTION"
             metadata.is_threat = True
             action_label = "Advertencia de Precaucion al Usuario"
-            summary = "Puntaje de riesgo intermedio. Presenta indicios sospechosos que ameritan revision preventiva. Se recomienda verificar la identidad del remitente antes de responder."
+            summary = "Puntaje de riesgo intermedio con senales de alerta. Se recomienda precaucion antes de interactuar."
         else:
             classification = "LEGITIMO"
             risk_level = "BAJO"
@@ -290,7 +312,9 @@ class AIClassifierService:
             metadata.is_threat = False
             action_label = "Marcado como Seguro"
             if metadata.all_links_trusted or metadata.is_trusted_sender:
-                summary = "Notificacion autentica o recuperacion de credenciales verificada. Los hipervinculos analizados dirigen exclusivamente a dominios institucionales autenticos sin desvio malicioso."
+                summary = "Notificacion autentica o recuperacion de credenciales verificada. Los hipervinculos dirigen exclusivamente a dominios institucionales autenticos sin desvio malicioso."
+            elif len(metadata.assurance_hits) > 0:
+                summary = "Comunicado transaccional legitimo conforme a estandares de notificacion. Sin vectores de coaccion ni desvio de enlaces."
             else:
                 summary = "Mensaje sin presencia significativa de patrones maliciosos ni enlaces de riesgo. Clasificado como seguro para el usuario."
 
