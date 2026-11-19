@@ -1074,3 +1074,9 @@ body {
     border-radius: 8px;
     border: 1px solid #E2E8F0;
 }
+
+.badge-risk-pending {
+    background-color: #F1F5F9;
+    color: #475569;
+    border: 1px solid #CBD5E1;
+}

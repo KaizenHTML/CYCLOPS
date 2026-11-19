@@ -149,17 +149,25 @@ function renderInboxList() {
     inboxList.innerHTML = "";
     loadedEmails.forEach(function (item) {
         const card = document.createElement("div");
-        const risk = item.evaluation ? item.evaluation.risk_level : "BAJO";
-        const riskClass = risk === "CRITICO" ? "threat-critico" : (risk === "MEDIO" ? "threat-medio" : "threat-bajo");
-        const pillClass = risk === "CRITICO" ? "badge-risk-critico" : (risk === "MEDIO" ? "badge-risk-medio" : "badge-risk-bajo");
-        const activeClass = item.id === currentEmailId ? " active-email" : "";
+        const isAudited = Boolean(item.is_audited);
 
+        let riskClass = "";
+        let pillClass = "badge-risk-pending";
+        let riskLabel = "No Auditado";
+        let conf = "Pendiente";
+
+        if (isAudited && item.evaluation) {
+            const risk = item.evaluation.risk_level || "BAJO";
+            riskClass = risk === "CRITICO" ? "threat-critico" : (risk === "MEDIO" ? "threat-medio" : "threat-bajo");
+            pillClass = risk === "CRITICO" ? "badge-risk-critico" : (risk === "MEDIO" ? "badge-risk-medio" : "badge-risk-bajo");
+            riskLabel = risk === "CRITICO" ? "Amenaza Critica" : (risk === "MEDIO" ? "Sospechoso" : "Seguro");
+            conf = (item.evaluation.confidence_score || 0) + "% Certeza";
+        }
+
+        const activeClass = item.id === currentEmailId ? " active-email" : "";
         card.className = "inbox-card " + riskClass + activeClass;
         card.setAttribute("data-email-id", item.id);
         card.onclick = function () { selectEmail(item.id); };
-
-        const conf = item.evaluation ? item.evaluation.confidence_score + "% Certeza" : "-";
-        const riskLabel = risk === "CRITICO" ? "Amenaza Critica" : (risk === "MEDIO" ? "Sospechoso" : "Seguro");
 
         const headerDiv = document.createElement("div");
         headerDiv.className = "inbox-card-header";
@@ -243,6 +251,78 @@ function resetInboxPanelsToPending() {
     if (pVal) pVal.innerText = "0.0%";
 }
 
+function displayInboxAuditedResults(evalData, meta) {
+    const risk = evalData.risk_level || "BAJO";
+
+    const stChars = document.getElementById("inbox-val-char-count");
+    const stWords = document.getElementById("inbox-val-url-count");
+    const stHasUrl = document.getElementById("inbox-val-has-url");
+    const stUrgency = document.getElementById("inbox-val-urgency-score");
+    const stUrlDensity = document.getElementById("inbox-val-url-density");
+    const stUrgDensity = document.getElementById("inbox-val-urgency-density");
+    const stThreat = document.getElementById("inbox-val-is-threat");
+
+    if (stChars) stChars.innerText = meta.char_count || 0;
+    if (stWords) stWords.innerText = meta.url_count || 0;
+    if (stHasUrl) stHasUrl.innerText = meta.has_url ? "SI" : "NO";
+    if (stUrgency) stUrgency.innerText = meta.urgency_score || 0;
+    if (stUrlDensity) stUrlDensity.innerText = (meta.url_density || 0) + "%";
+    if (stUrgDensity) stUrgDensity.innerText = (meta.urgency_density || 0) + "%";
+    if (stThreat) stThreat.innerText = meta.is_threat ? "Amenaza Confirmada" : "Seguro";
+
+    const vBanner = document.getElementById("inbox-verdict-banner");
+    const vTitle = document.getElementById("inbox-verdict-title");
+    const vDesc = document.getElementById("inbox-verdict-desc");
+    const vPill = document.getElementById("inbox-verdict-risk-pill");
+    const pFill = document.getElementById("inbox-prob-progress-fill");
+    const pVal = document.getElementById("inbox-prob-value-text");
+
+    if (vPill) vPill.innerText = risk;
+    if (pVal) pVal.innerText = (evalData.confidence_score || 0) + "%";
+    if (pFill) pFill.style.width = (evalData.confidence_score || 0) + "%";
+
+    if (risk === "CRITICO") {
+        if (vBanner) {
+            vBanner.style.backgroundColor = "#FEF2F2";
+            vBanner.style.borderColor = "#F87171";
+            vBanner.style.color = "#991B1B";
+        }
+        if (vTitle) vTitle.innerText = "Amenaza Critica Detectada";
+        if (vDesc) vDesc.innerText = evalData.summary || "Se detectaron patrones de suplantacion o coaccion en el mensaje. Se sugiere aislarlo de la bandeja.";
+        if (vPill) {
+            vPill.style.backgroundColor = "#FEE2E2";
+            vPill.style.color = "#991B1B";
+        }
+        if (pFill) pFill.style.backgroundColor = "#EF4444";
+    } else if (risk === "MEDIO") {
+        if (vBanner) {
+            vBanner.style.backgroundColor = "#FFFBEB";
+            vBanner.style.borderColor = "#FCD34D";
+            vBanner.style.color = "#92400E";
+        }
+        if (vTitle) vTitle.innerText = "Riesgo Moderado";
+        if (vDesc) vDesc.innerText = evalData.summary || "El mensaje presenta indicadores que ameritan revision antes de interactuar.";
+        if (vPill) {
+            vPill.style.backgroundColor = "#FEF3C7";
+            vPill.style.color = "#92400E";
+        }
+        if (pFill) pFill.style.backgroundColor = "#F59E0B";
+    } else {
+        if (vBanner) {
+            vBanner.style.backgroundColor = "#ECFDF5";
+            vBanner.style.borderColor = "#6EE7B7";
+            vBanner.style.color = "#065F46";
+        }
+        if (vTitle) vTitle.innerText = "Mensaje Verificado y Seguro";
+        if (vDesc) vDesc.innerText = evalData.summary || "Estructura conforme sin indicios de riesgo o remitente verificado.";
+        if (vPill) {
+            vPill.style.backgroundColor = "#D1FAE5";
+            vPill.style.color = "#065F46";
+        }
+        if (pFill) pFill.style.backgroundColor = "#10B981";
+    }
+}
+
 function selectEmail(emailId) {
     currentEmailId = emailId;
     const item = loadedEmails.find(function (e) { return e.id === emailId; });
@@ -268,13 +348,22 @@ function selectEmail(emailId) {
     if (bodyEl) bodyEl.innerText = item.body || item.snippet || "";
 
     const btnAnalyze = document.getElementById("btn-inbox-run-analysis");
-    if (btnAnalyze) {
-        btnAnalyze.disabled = false;
-        btnAnalyze.innerHTML = "&#9889; Ejecutar Analisis de Seguridad";
-        btnAnalyze.style.backgroundColor = "#2E75D3";
-    }
 
-    resetInboxPanelsToPending();
+    if (item.is_audited && item.evaluation && item.metadata) {
+        if (btnAnalyze) {
+            btnAnalyze.disabled = false;
+            btnAnalyze.innerHTML = "&#10004; Correo Auditado - Reanalizar";
+            btnAnalyze.style.backgroundColor = "#059669";
+        }
+        displayInboxAuditedResults(item.evaluation, item.metadata);
+    } else {
+        if (btnAnalyze) {
+            btnAnalyze.disabled = false;
+            btnAnalyze.innerHTML = "&#9889; Ejecutar Analisis de Seguridad";
+            btnAnalyze.style.backgroundColor = "#2E75D3";
+        }
+        resetInboxPanelsToPending();
+    }
 }
 
 function runInboxEmailAnalysis() {
@@ -306,78 +395,12 @@ function runInboxEmailAnalysis() {
         if (data.status === "success") {
             const meta = data.metadata || {};
             const evalData = data.evaluation || {};
-            const risk = evalData.risk_level || "BAJO";
 
+            item.is_audited = true;
             item.evaluation = evalData;
             item.metadata = meta;
 
-            const stChars = document.getElementById("inbox-val-char-count");
-            const stWords = document.getElementById("inbox-val-url-count");
-            const stHasUrl = document.getElementById("inbox-val-has-url");
-            const stUrgency = document.getElementById("inbox-val-urgency-score");
-            const stUrlDensity = document.getElementById("inbox-val-url-density");
-            const stUrgDensity = document.getElementById("inbox-val-urgency-density");
-            const stThreat = document.getElementById("inbox-val-is-threat");
-
-            if (stChars) stChars.innerText = meta.char_count || 0;
-            if (stWords) stWords.innerText = meta.url_count || 0;
-            if (stHasUrl) stHasUrl.innerText = meta.has_url ? "SI" : "NO";
-            if (stUrgency) stUrgency.innerText = meta.urgency_score || 0;
-            if (stUrlDensity) stUrlDensity.innerText = (meta.url_density || 0) + "%";
-            if (stUrgDensity) stUrgDensity.innerText = (meta.urgency_density || 0) + "%";
-            if (stThreat) stThreat.innerText = meta.is_threat ? "Amenaza Confirmada" : "Seguro";
-
-            const vBanner = document.getElementById("inbox-verdict-banner");
-            const vTitle = document.getElementById("inbox-verdict-title");
-            const vDesc = document.getElementById("inbox-verdict-desc");
-            const vPill = document.getElementById("inbox-verdict-risk-pill");
-            const pFill = document.getElementById("inbox-prob-progress-fill");
-            const pVal = document.getElementById("inbox-prob-value-text");
-
-            if (vPill) vPill.innerText = risk;
-            if (pVal) pVal.innerText = (evalData.confidence_score || 0) + "%";
-            if (pFill) pFill.style.width = (evalData.confidence_score || 0) + "%";
-
-            if (risk === "CRITICO") {
-                if (vBanner) {
-                    vBanner.style.backgroundColor = "#FEF2F2";
-                    vBanner.style.borderColor = "#F87171";
-                    vBanner.style.color = "#991B1B";
-                }
-                if (vTitle) vTitle.innerText = "Amenaza Critica Detectada";
-                if (vDesc) vDesc.innerText = evalData.summary || "Se detectaron patrones de suplantacion o coaccion en el mensaje. Se sugiere aislarlo de la bandeja.";
-                if (vPill) {
-                    vPill.style.backgroundColor = "#FEE2E2";
-                    vPill.style.color = "#991B1B";
-                }
-                if (pFill) pFill.style.backgroundColor = "#EF4444";
-            } else if (risk === "MEDIO") {
-                if (vBanner) {
-                    vBanner.style.backgroundColor = "#FFFBEB";
-                    vBanner.style.borderColor = "#FCD34D";
-                    vBanner.style.color = "#92400E";
-                }
-                if (vTitle) vTitle.innerText = "Riesgo Moderado";
-                if (vDesc) vDesc.innerText = evalData.summary || "El mensaje presenta indicadores que ameritan revision antes de interactuar.";
-                if (vPill) {
-                    vPill.style.backgroundColor = "#FEF3C7";
-                    vPill.style.color = "#92400E";
-                }
-                if (pFill) pFill.style.backgroundColor = "#F59E0B";
-            } else {
-                if (vBanner) {
-                    vBanner.style.backgroundColor = "#ECFDF5";
-                    vBanner.style.borderColor = "#6EE7B7";
-                    vBanner.style.color = "#065F46";
-                }
-                if (vTitle) vTitle.innerText = "Mensaje Verificado y Seguro";
-                if (vDesc) vDesc.innerText = evalData.summary || "Estructura conforme sin indicios de riesgo o remitente verificado.";
-                if (vPill) {
-                    vPill.style.backgroundColor = "#D1FAE5";
-                    vPill.style.color = "#065F46";
-                }
-                if (pFill) pFill.style.backgroundColor = "#10B981";
-            }
+            displayInboxAuditedResults(evalData, meta);
 
             if (btnAnalyze) {
                 btnAnalyze.disabled = false;
