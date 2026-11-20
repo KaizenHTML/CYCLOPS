@@ -101,7 +101,7 @@ function fetchUserProfile() {
                     heroGoogleBtn.style.display = "none";
                 }
             } else {
-                userSlot.innerHTML = '<a href="/auth/google" class="btn-google-connect" style="padding: 8px 16px; font-size: 13px;">Conectar con Google</a>';
+                userSlot.innerHTML = "";
             }
         })
         .catch(function () {});
