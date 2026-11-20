@@ -5,10 +5,10 @@ function clearInboxReadingPane() {
     const dateEl = document.getElementById("reading-date");
     const bodyEl = document.getElementById("reading-body");
 
-    if (subjectEl) subjectEl.innerText = "Seleccione un correo para auditar";
+    if (subjectEl) subjectEl.innerText = "Selecciona un correo para auditar";
     if (senderEl) senderEl.innerText = "Remitente: -";
     if (dateEl) dateEl.innerText = "Fecha: -";
-    if (bodyEl) bodyEl.innerText = "Haga clic sobre cualquiera de los correos de la bandeja para desplegar su contenido completo e iniciar la auditoria en tiempo real.";
+    if (bodyEl) bodyEl.innerText = "Haz clic sobre cualquiera de los correos de la bandeja para desplegar su contenido completo e iniciar la auditoría en tiempo real.";
 
     const stChars = document.getElementById("inbox-val-char-count");
     const stWords = document.getElementById("inbox-val-url-count");
@@ -38,10 +38,10 @@ function clearInboxReadingPane() {
         vBanner.style.borderColor = "#DDE8F4";
         vBanner.style.color = "#64748B";
     }
-    if (vTitle) vTitle.innerText = "Esperando Seleccion";
-    if (vDesc) vDesc.innerText = "Seleccione un correo para desplegar su evaluacion.";
+    if (vTitle) vTitle.innerText = "Esperando selección";
+    if (vDesc) vDesc.innerText = "Selecciona un correo para desplegar su evaluación.";
     if (vPill) {
-        vPill.innerText = "INACTIVO";
+        vPill.innerText = "Inactivo";
         vPill.style.backgroundColor = "#E2E8F0";
         vPill.style.color = "#475569";
     }
@@ -96,7 +96,7 @@ function fetchUserProfile() {
                 } else {
                     avatarHtml = '<span class="user-avatar-img" style="display:flex;align-items:center;justify-content:center;background:#2E75D3;color:#FFF;font-weight:700;">U</span>';
                 }
-                userSlot.innerHTML = '<div class="user-badge-header">' + avatarHtml + '<span class="user-badge-text">' + userName + '</span><a href="/auth/logout" class="btn-logout-link">Cerrar Sesion</a></div>';
+                userSlot.innerHTML = '<div class="user-badge-header">' + avatarHtml + '<span class="user-badge-text">' + userName + '</span><a href="/auth/logout" class="btn-logout-link">Cerrar sesión</a></div>';
                 if (heroGoogleBtn) {
                     heroGoogleBtn.style.display = "none";
                 }
@@ -111,7 +111,7 @@ function fetchInboxEmails(source) {
     const inboxList = document.getElementById("inbox-list");
     const badge = document.getElementById("inbox-source-badge");
     if (inboxList) {
-        inboxList.innerHTML = '<div class="empty-state">Cargando mensajes del buzon...</div>';
+        inboxList.innerHTML = '<div class="empty-state">Cargando mensajes del buzón...</div>';
     }
 
     const srcParam = source || "auto";
@@ -122,7 +122,7 @@ function fetchInboxEmails(source) {
             loadedEmails = data.emails;
 
             if (badge) {
-                badge.innerText = data.source === "gmail" ? "Gmail Oficial Conectado" : "Buzon de Muestra";
+                badge.innerText = data.source === "gmail" ? "Gmail oficial conectado" : "Buzón de muestra";
                 badge.style.backgroundColor = data.source === "gmail" ? "#D1FAE5" : "#E2E8F0";
                 badge.style.color = data.source === "gmail" ? "#065F46" : "#475569";
             }
@@ -132,7 +132,7 @@ function fetchInboxEmails(source) {
         })
         .catch(function () {
             if (inboxList) {
-                inboxList.innerHTML = '<div class="empty-state">No se pudieron cargar los correos. Verifique la conexion o intente con el buzon de muestra.</div>';
+                inboxList.innerHTML = '<div class="empty-state">No se pudieron cargar los correos. Verifica la conexión o intenta con el buzón de muestra.</div>';
             }
         });
 }
@@ -153,15 +153,15 @@ function renderInboxList() {
 
         let riskClass = "";
         let pillClass = "badge-risk-pending";
-        let riskLabel = "No Auditado";
+        let riskLabel = "No auditado";
         let conf = "Pendiente";
 
         if (isAudited && item.evaluation) {
             const risk = item.evaluation.risk_level || "BAJO";
             riskClass = risk === "CRITICO" ? "threat-critico" : (risk === "MEDIO" ? "threat-medio" : "threat-bajo");
             pillClass = risk === "CRITICO" ? "badge-risk-critico" : (risk === "MEDIO" ? "badge-risk-medio" : "badge-risk-bajo");
-            riskLabel = risk === "CRITICO" ? "Amenaza Critica" : (risk === "MEDIO" ? "Sospechoso" : "Seguro");
-            conf = (item.evaluation.confidence_score || 0) + "% Certeza";
+            riskLabel = risk === "CRITICO" ? "Amenaza crítica" : (risk === "MEDIO" ? "Sospechoso" : "Seguro");
+            conf = (item.evaluation.confidence_score || 0) + "% certeza";
         }
 
         const activeClass = item.id === currentEmailId ? " active-email" : "";
@@ -237,10 +237,10 @@ function resetInboxPanelsToPending() {
         vBanner.style.borderColor = "#DDE8F4";
         vBanner.style.color = "#64748B";
     }
-    if (vTitle) vTitle.innerText = "Pendiente de Auditoria";
-    if (vDesc) vDesc.innerText = "Presione el boton Ejecutar Analisis de Seguridad para auditar el correo e incorporarlo al historial del usuario.";
+    if (vTitle) vTitle.innerText = "Pendiente de auditoría";
+    if (vDesc) vDesc.innerText = "Presiona el botón Ejecutar análisis de seguridad para auditar el correo e incorporarlo al historial del usuario.";
     if (vPill) {
-        vPill.innerText = "PENDIENTE";
+        vPill.innerText = "Pendiente";
         vPill.style.backgroundColor = "#E2E8F0";
         vPill.style.color = "#475569";
     }
@@ -268,7 +268,7 @@ function displayInboxAuditedResults(evalData, meta) {
     if (stUrgency) stUrgency.innerText = meta.urgency_score || 0;
     if (stUrlDensity) stUrlDensity.innerText = (meta.url_density || 0) + "%";
     if (stUrgDensity) stUrgDensity.innerText = (meta.urgency_density || 0) + "%";
-    if (stThreat) stThreat.innerText = meta.is_threat ? "Amenaza Confirmada" : "Seguro";
+    if (stThreat) stThreat.innerText = meta.is_threat ? "Amenaza confirmada" : "Seguro";
 
     const vBanner = document.getElementById("inbox-verdict-banner");
     const vTitle = document.getElementById("inbox-verdict-title");
@@ -287,8 +287,8 @@ function displayInboxAuditedResults(evalData, meta) {
             vBanner.style.borderColor = "#F87171";
             vBanner.style.color = "#991B1B";
         }
-        if (vTitle) vTitle.innerText = "Amenaza Critica Detectada";
-        if (vDesc) vDesc.innerText = evalData.summary || "Se detectaron patrones de suplantacion o coaccion en el mensaje. Se sugiere aislarlo de la bandeja.";
+        if (vTitle) vTitle.innerText = "Amenaza crítica detectada";
+        if (vDesc) vDesc.innerText = evalData.summary || "Se detectaron patrones de suplantación o coacción en el mensaje. Se sugiere aislarlo de la bandeja.";
         if (vPill) {
             vPill.style.backgroundColor = "#FEE2E2";
             vPill.style.color = "#991B1B";
@@ -300,8 +300,8 @@ function displayInboxAuditedResults(evalData, meta) {
             vBanner.style.borderColor = "#FCD34D";
             vBanner.style.color = "#92400E";
         }
-        if (vTitle) vTitle.innerText = "Riesgo Moderado";
-        if (vDesc) vDesc.innerText = evalData.summary || "El mensaje presenta indicadores que ameritan revision antes de interactuar.";
+        if (vTitle) vTitle.innerText = "Riesgo moderado";
+        if (vDesc) vDesc.innerText = evalData.summary || "El mensaje presenta indicadores que ameritan revisión antes de interactuar.";
         if (vPill) {
             vPill.style.backgroundColor = "#FEF3C7";
             vPill.style.color = "#92400E";
@@ -313,7 +313,7 @@ function displayInboxAuditedResults(evalData, meta) {
             vBanner.style.borderColor = "#6EE7B7";
             vBanner.style.color = "#065F46";
         }
-        if (vTitle) vTitle.innerText = "Mensaje Verificado y Seguro";
+        if (vTitle) vTitle.innerText = "Mensaje verificado y seguro";
         if (vDesc) vDesc.innerText = evalData.summary || "Estructura conforme sin indicios de riesgo o remitente verificado.";
         if (vPill) {
             vPill.style.backgroundColor = "#D1FAE5";
@@ -352,14 +352,14 @@ function selectEmail(emailId) {
     if (item.is_audited && item.evaluation && item.metadata) {
         if (btnAnalyze) {
             btnAnalyze.disabled = false;
-            btnAnalyze.innerHTML = "&#10004; Correo Auditado - Reanalizar";
+            btnAnalyze.innerHTML = "&#10004; Correo auditado - Reanalizar";
             btnAnalyze.style.backgroundColor = "#059669";
         }
         displayInboxAuditedResults(item.evaluation, item.metadata);
     } else {
         if (btnAnalyze) {
             btnAnalyze.disabled = false;
-            btnAnalyze.innerHTML = "&#9889; Ejecutar Analisis de Seguridad";
+            btnAnalyze.innerHTML = "&#9889; Ejecutar análisis de seguridad";
             btnAnalyze.style.backgroundColor = "#2E75D3";
         }
         resetInboxPanelsToPending();
@@ -368,7 +368,7 @@ function selectEmail(emailId) {
 
 function runInboxEmailAnalysis() {
     if (!currentEmailId) {
-        alert("Por favor seleccione un correo de la bandeja primero.");
+        alert("Por favor selecciona un correo de la bandeja primero.");
         return;
     }
     const item = loadedEmails.find(function (e) { return e.id === currentEmailId; });
@@ -404,26 +404,26 @@ function runInboxEmailAnalysis() {
 
             if (btnAnalyze) {
                 btnAnalyze.disabled = false;
-                btnAnalyze.innerHTML = "&#10004; Analisis Registrado en Historial";
+                btnAnalyze.innerHTML = "&#10004; Análisis registrado en historial";
                 btnAnalyze.style.backgroundColor = "#059669";
             }
 
             fetchIncidents();
             renderInboxList();
         } else {
-            alert("Error al procesar el analisis.");
+            alert("Error al procesar el análisis.");
             if (btnAnalyze) {
                 btnAnalyze.disabled = false;
-                btnAnalyze.innerHTML = "&#9889; Ejecutar Analisis de Seguridad";
+                btnAnalyze.innerHTML = "&#9889; Ejecutar análisis de seguridad";
                 btnAnalyze.style.backgroundColor = "#2E75D3";
             }
         }
     })
     .catch(function () {
-        alert("Ocurrio un error al comunicarse con el servidor.");
+        alert("Ocurrió un error al comunicarse con el servidor.");
         if (btnAnalyze) {
             btnAnalyze.disabled = false;
-            btnAnalyze.innerHTML = "&#9889; Ejecutar Analisis de Seguridad";
+            btnAnalyze.innerHTML = "&#9889; Ejecutar análisis de seguridad";
             btnAnalyze.style.backgroundColor = "#2E75D3";
         }
     });
@@ -520,12 +520,12 @@ function resetPanels() {
     }
 
     const vTitle = document.getElementById("verdict-title");
-    if (vTitle) vTitle.innerText = "Esperando Analisis";
+    if (vTitle) vTitle.innerText = "Esperando análisis";
     const vDesc = document.getElementById("verdict-desc");
-    if (vDesc) vDesc.innerText = "Ingrese un correo para activar el motor.";
+    if (vDesc) vDesc.innerText = "Ingresa un correo para activar el motor.";
     const vPill = document.getElementById("verdict-risk-pill");
     if (vPill) {
-        vPill.innerText = "INACTIVO";
+        vPill.innerText = "Inactivo";
         vPill.style.backgroundColor = "#E2E8F0";
         vPill.style.color = "#475569";
     }
@@ -540,10 +540,9 @@ function resetPanels() {
 
     const rulesContainer = document.getElementById("decision-rules-container");
     if (rulesContainer) {
-        rulesContainer.innerHTML = '<div class="empty-state">Ejecute un analisis para visualizar la secuencia logica de decision en niveles.</div>';
+        rulesContainer.innerHTML = '<div class="empty-state">Ejecuta un análisis para visualizar la secuencia lógica de decisión en niveles.</div>';
     }
-    const exTime = document.getElementById("execution-time-label");
-    if (exTime) exTime.innerText = "Latencia: -";
+
 }
 
 function performAnalysis(text, analyzeBtn) {
@@ -566,7 +565,7 @@ function performAnalysis(text, analyzeBtn) {
     .then(function (data) {
         if (analyzeBtn) {
             analyzeBtn.disabled = false;
-            analyzeBtn.innerText = "Ejecutar Analisis de Seguridad";
+            analyzeBtn.innerText = "Ejecutar análisis de seguridad";
         }
         if (!data || !data.metadata || !data.evaluation) {
             alert("Error al procesar la respuesta del modelo.");
@@ -582,7 +581,7 @@ function performAnalysis(text, analyzeBtn) {
         document.getElementById("val-urgency-score").innerText = meta.urgency_score;
         document.getElementById("val-url-density").innerText = meta.url_density + "%";
         document.getElementById("val-urgency-density").innerText = meta.urgency_density + "%";
-        document.getElementById("val-is-threat").innerText = meta.is_threat ? "AMENAZA CONFIRMADA" : "SEGURO";
+        document.getElementById("val-is-threat").innerText = meta.is_threat ? "Amenaza confirmada" : "Seguro";
 
         const risk = evalRes.risk_level;
         const verdictBanner = document.getElementById("verdict-banner");
@@ -600,8 +599,8 @@ function performAnalysis(text, analyzeBtn) {
             verdictBanner.style.backgroundColor = "#FEF2F2";
             verdictBanner.style.borderColor = "#F87171";
             verdictBanner.style.color = "#991B1B";
-            vTitle.innerText = "Amenaza Critica Detectada";
-            vDesc.innerText = "Se detectaron multiples indicadores de phishing y alta densidad de urgencia. Aislamiento automatico ejecutado.";
+            vTitle.innerText = "Amenaza crítica detectada";
+            vDesc.innerText = "Se detectaron múltiples indicadores de phishing y alta densidad de urgencia. Aislamiento automático ejecutado.";
             vPill.style.backgroundColor = "#FEE2E2";
             vPill.style.color = "#991B1B";
             pFill.style.backgroundColor = "#EF4444";
@@ -609,8 +608,8 @@ function performAnalysis(text, analyzeBtn) {
             verdictBanner.style.backgroundColor = "#FFFBEB";
             verdictBanner.style.borderColor = "#FCD34D";
             verdictBanner.style.color = "#92400E";
-            vTitle.innerText = "Riesgo Moderado";
-            vDesc.innerText = "El mensaje presenta indicios sospechosos que requieren precaucion.";
+            vTitle.innerText = "Riesgo moderado";
+            vDesc.innerText = "El mensaje presenta indicios sospechosos que requieren precaución.";
             vPill.style.backgroundColor = "#FEF3C7";
             vPill.style.color = "#92400E";
             pFill.style.backgroundColor = "#F59E0B";
@@ -618,8 +617,8 @@ function performAnalysis(text, analyzeBtn) {
             verdictBanner.style.backgroundColor = "#ECFDF5";
             verdictBanner.style.borderColor = "#6EE7B7";
             verdictBanner.style.color = "#065F46";
-            vTitle.innerText = "Mensaje Conforme y Seguro";
-            vDesc.innerText = "No se detectaron anomalias en el patron del mensaje.";
+            vTitle.innerText = "Mensaje conforme y seguro";
+            vDesc.innerText = "No se detectaron anomalías en el patrón del mensaje.";
             vPill.style.backgroundColor = "#D1FAE5";
             vPill.style.color = "#065F46";
             pFill.style.backgroundColor = "#10B981";
@@ -636,18 +635,15 @@ function performAnalysis(text, analyzeBtn) {
             });
         }
 
-        const exTime = document.getElementById("execution-time-label");
-        if (exTime) {
-            exTime.innerText = "Latencia: " + data.execution_time_ms + " ms";
-        }
+
         fetchIncidents();
     })
     .catch(function () {
         if (analyzeBtn) {
             analyzeBtn.disabled = false;
-            analyzeBtn.innerText = "Ejecutar Analisis de Seguridad";
+            analyzeBtn.innerText = "Ejecutar análisis de seguridad";
         }
-        alert("Ocurrio un error al comunicarse con el servidor.");
+        alert("Ocurrió un error al comunicarse con el servidor.");
     });
 }
 
@@ -681,14 +677,14 @@ function renderIncidentsTable(incidents) {
 
         let statusBadge = '<span style="background-color: #E2E8F0; color: #475569; padding: 4px 8px; border-radius: 9999px; font-weight: 700; font-size: 11px;">' + inc.status + '</span>';
         if (inc.status === "PENDING_SOC_REVIEW") {
-            statusBadge = '<span style="background-color: #FEF3C7; color: #92400E; padding: 4px 8px; border-radius: 9999px; font-weight: 700; font-size: 11px;">REVISION SOC</span>';
+            statusBadge = '<span style="background-color: #FEF3C7; color: #92400E; padding: 4px 8px; border-radius: 9999px; font-weight: 700; font-size: 11px;">REVISIÓN SOC</span>';
         } else if (inc.status === "RESOLVED_QUARANTINE" || inc.status === "AUTO_MITIGATED_QUARANTINE") {
             statusBadge = '<span style="background-color: #FEE2E2; color: #991B1B; padding: 4px 8px; border-radius: 9999px; font-weight: 700; font-size: 11px;">CUARENTENA</span>';
         } else if (inc.status === "RESOLVED_FALSE_POSITIVE" || inc.status === "MARKED_AS_SAFE") {
             statusBadge = '<span style="background-color: #D1FAE5; color: #065F46; padding: 4px 8px; border-radius: 9999px; font-weight: 700; font-size: 11px;">SEGURO</span>';
         }
 
-        let userRecommendation = '<span style="color: #059669; font-weight: 600;">Lectura e interaccion segura</span>';
+        let userRecommendation = '<span style="color: #059669; font-weight: 600;">Lectura e interacción segura</span>';
         if (risk === "CRITICO") {
             userRecommendation = '<span style="color: #DC2626; font-weight: 600;">Aislar mensaje y no abrir enlaces</span>';
         } else if (risk === "MEDIO") {

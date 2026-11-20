@@ -14,7 +14,7 @@
     <header class="site-header" style="display: flex; justify-content: space-between; align-items: center; padding: 18px 32px; background-color: #FFFFFF; border-bottom: 1px solid #DDE8F4; box-shadow: 0 2px 10px #9bbcdb14;">
         <div style="text-align: left;">
             <h1 style="font-size: 22px; font-weight: 800; letter-spacing: 1.5px; color: #2E75D3; margin: 0;">CYCLOPS SENTINEL</h1>
-            <span style="font-size: 12px; color: #64748B; font-weight: 600;">Escudo Autonomo de Deteccion de Phishing</span>
+            <span style="font-size: 12px; color: #64748B; font-weight: 600;">Escudo autónomo de detección de phishing</span>
         </div>
         <div id="header-user-area" style="display: flex; align-items: center; gap: 12px;"></div>
     </header>
@@ -23,13 +23,13 @@
 
         <nav class="nav-tabs">
             <button class="tab-btn active" data-tab="tab-inbox">
-                Bandeja de Entrada Inteligente
+                Bandeja de entrada inteligente
             </button>
             <button class="tab-btn" data-tab="tab-inferencia">
-                Analizador Manual de Texto
+                Analizador manual de texto
             </button>
             <button class="tab-btn" data-tab="tab-soc">
-                Historial de Análisis del Usuario <span class="badge-counter" id="badge-soc-count">0</span>
+                Historial de análisis del usuario <span class="badge-counter" id="badge-soc-count">0</span>
             </button>
             
         </nav>
@@ -37,15 +37,15 @@
                 <section id="tab-inbox" class="tab-panel active">
             <div class="auth-hero-banner" id="auth-hero-banner">
                 <div class="auth-hero-info">
-                    <h2>Escudo Autonomo de Phishing para Gmail</h2>
-                    <p>Inspeccion automatica de correos electronicos en tiempo real sin friccion ni copia manual de texto. Conecta tu cuenta oficial de Google para auditar tu buzon de entrada de forma segura.</p>
+                    <h2>Escudo autónomo de phishing para Gmail</h2>
+                    <p>Inspección automática de correos electrónicos en tiempo real sin fricción ni copia manual de texto. Conecta tu cuenta oficial de Google para auditar tu buzón de entrada de forma segura.</p>
                 </div>
                 <div class="auth-hero-actions">
                     <a href="/auth/google" class="btn-google-connect" id="btn-hero-google">
                         Conectar con mi Gmail
                     </a>
                     <button type="button" id="btn-refresh-inbox" class="btn-demo-toggle">
-                        Actualizar Buzon
+                        Actualizar buzón
                     </button>
                 </div>
             </div>
@@ -53,11 +53,11 @@
             <div class="inbox-layout">
                 <div class="card" style="margin-bottom: 0;">
                     <div class="card-title">
-                        <span>Bandeja de Entrada</span>
+                        <span>Bandeja de entrada</span>
                         <span class="badge-counter" id="inbox-source-badge">Cargando...</span>
                     </div>
                     <div class="inbox-list" id="inbox-list">
-                        <div class="empty-state">Cargando mensajes del buzon...</div>
+                        <div class="empty-state">Cargando mensajes del buzón...</div>
                     </div>
                 </div>
 
@@ -65,17 +65,17 @@
 
                     <div class="card" style="margin-bottom: 0; padding: 18px 24px; display: flex; justify-content: space-between; align-items: center; border-radius: 20px; box-shadow: 0 4px 16px #9bbcdb1c;">
                         <div>
-                            <span style="font-weight: 700; color: #1E293B; font-size: 15px;">Modulo de Inferencia del Escudo</span>
-                            <p style="font-size: 13px; color: #64748B; margin: 4px 0 0 0;">Ejecute la auditoria en tiempo real sobre el mensaje seleccionado</p>
+                            <span style="font-weight: 700; color: #1E293B; font-size: 15px;">Módulo de inferencia del escudo</span>
+                            <p style="font-size: 13px; color: #64748B; margin: 4px 0 0 0;">Ejecuta la auditoría en tiempo real sobre el mensaje seleccionado</p>
                         </div>
                         <button type="button" id="btn-inbox-run-analysis" class="btn-primary" style="padding: 12px 24px; font-size: 14px; font-weight: 700; border-radius: 12px; background-color: #2E75D3; color: #FFFFFF; border: none; cursor: pointer; display: flex; align-items: center; gap: 8px;">
-                            &#9889; Ejecutar Analisis de Seguridad
+                            &#9889; Ejecutar análisis de seguridad
                         </button>
                     </div>
 
                     <div class="reading-pane" id="reading-pane" style="margin-bottom: 0;">
                         <div class="reading-header">
-                            <h2 class="reading-subject" id="reading-subject">Seleccione un correo para auditar</h2>
+                            <h2 class="reading-subject" id="reading-subject">Selecciona un correo para auditar</h2>
                             <div class="reading-meta-row">
                                 <span id="reading-sender">Remitente: -</span>
                                 <span id="reading-date">Fecha: -</span>
@@ -83,66 +83,66 @@
                         </div>
 
                         <div class="reading-body" id="reading-body">
-Haga clic sobre cualquiera de los correos de la bandeja para desplegar su contenido completo e iniciar la auditoria del escudo CYCLOPS en tiempo real.
+Haz clic sobre cualquiera de los correos de la bandeja para desplegar su contenido completo e iniciar la auditoría del escudo CYCLOPS en tiempo real.
                         </div>
                     </div>
 
                     <div class="card" style="margin-bottom: 0;">
                         <div class="card-title">
-                            <span>Panel de Extraccion de Metricas</span>
-                            <span class="badge-counter">Variables de Dominio</span>
+                            <span>Panel de extracción de métricas</span>
+                            <span class="badge-counter">Variables de dominio</span>
                         </div>
 
                         <div class="metrics-grid">
                             <div class="metric-tile">
-                                <div class="metric-key">Total de Caracteres</div>
+                                <div class="metric-key">Total de caracteres</div>
                                 <div class="metric-value" id="inbox-val-char-count">-</div>
                                 <div class="metric-desc">Longitud total del mensaje</div>
                             </div>
                             <div class="metric-tile">
-                                <div class="metric-key">Enlaces Detectados</div>
+                                <div class="metric-key">Enlaces detectados</div>
                                 <div class="metric-value" id="inbox-val-url-count">-</div>
                                 <div class="metric-desc">Direcciones web encontradas</div>
                             </div>
                             <div class="metric-tile">
-                                <div class="metric-key">Contiene Enlaces</div>
+                                <div class="metric-key">Contiene enlaces</div>
                                 <div class="metric-value" id="inbox-val-has-url">-</div>
-                                <div class="metric-desc">Presencia de hipervinculos</div>
+                                <div class="metric-desc">Presencia de hipervínculos</div>
                             </div>
                             <div class="metric-tile">
-                                <div class="metric-key">Nivel de Urgencia</div>
+                                <div class="metric-key">Nivel de urgencia</div>
                                 <div class="metric-value" id="inbox-val-urgency-score">-</div>
-                                <div class="metric-desc">Puntaje de coaccion calculado</div>
+                                <div class="metric-desc">Puntaje de coacción calculado</div>
                             </div>
                             <div class="metric-tile">
-                                <div class="metric-key">Densidad de Enlaces</div>
+                                <div class="metric-key">Densidad de enlaces</div>
                                 <div class="metric-value" id="inbox-val-url-density">-</div>
-                                <div class="metric-desc">Proporcion respecto al texto</div>
+                                <div class="metric-desc">Proporción respecto al texto</div>
                             </div>
                             <div class="metric-tile">
-                                <div class="metric-key">Densidad de Urgencia</div>
+                                <div class="metric-key">Densidad de urgencia</div>
                                 <div class="metric-value" id="inbox-val-urgency-density">-</div>
-                                <div class="metric-desc">Frecuencia de terminos de alerta</div>
+                                <div class="metric-desc">Frecuencia de términos de alerta</div>
                             </div>
                             <div class="metric-tile">
-                                <div class="metric-key">Veredicto del Sistema</div>
+                                <div class="metric-key">Veredicto del sistema</div>
                                 <div class="metric-value" id="inbox-val-is-threat">-</div>
-                                <div class="metric-desc">Clasificacion del modelo</div>
+                                <div class="metric-desc">Clasificación del modelo</div>
                             </div>
                         </div>
                     </div>
 
                     <div class="card" style="margin-bottom: 0;">
                         <div class="card-title">
-                            <span>Panel de Diagnostico Predictivo</span>
+                            <span>Panel de diagnóstico predictivo</span>
                             <span class="badge-counter">Inferencia ML</span>
                         </div>
 
                         <div class="diagnostic-box">
                             <div id="inbox-verdict-banner" class="verdict-banner" style="background-color: #F8FAFD; border-color: #DDE8F4; color: #64748B;">
                                 <div class="verdict-info">
-                                    <h3 id="inbox-verdict-title">Esperando Seleccion</h3>
-                                    <p id="inbox-verdict-desc">Seleccione un correo para desplegar su evaluacion.</p>
+                                    <h3 id="inbox-verdict-title">Esperando selección</h3>
+                                    <p id="inbox-verdict-desc">Selecciona un correo para desplegar su evaluación.</p>
                                 </div>
                                 <div id="inbox-verdict-risk-pill" class="risk-pill" style="background-color: #E2E8F0; color: #475569;">
                                     INACTIVO
@@ -151,7 +151,7 @@ Haga clic sobre cualquiera de los correos de la bandeja para desplegar su conten
 
                             <div>
                                 <div class="progress-labels">
-                                    <span>Probabilidad de Amenaza Calculada</span>
+                                    <span>Probabilidad de amenaza calculada</span>
                                     <span id="inbox-prob-value-text">0.0%</span>
                                 </div>
                                 <div class="progress-track">
@@ -170,77 +170,76 @@ Haga clic sobre cualquiera de los correos de la bandeja para desplegar su conten
 
                 <div class="card" style="margin-bottom: 0;">
                     <div class="card-title">
-                        <span>Ingesta de Mensaje Sospechoso</span>
+                        <span>Ingesta de mensaje sospechoso</span>
                         <span class="badge-counter">Analizador L1</span>
                     </div>
 
-                    <textarea id="email-text-input" class="text-area-input" placeholder="Pegue aqui el texto del correo electronico o mensaje sospechoso para someterlo a analisis heuristico y clasificacion..."></textarea>
+                    <textarea id="email-text-input" class="text-area-input" placeholder="Pega aquí el texto del correo electrónico o mensaje sospechoso para someterlo a análisis heurístico y clasificación..."></textarea>
 
-                    <div class="action-row" style="display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 14px;">
-                        <span class="execution-pill" id="execution-time-label">Latencia: -</span>
+                    <div class="action-row" style="display: flex; justify-content: flex-end; align-items: center; gap: 12px; margin-top: 14px;">
                         <div style="display: flex; gap: 10px;">
                             <button type="button" id="btn-clear-text" class="btn-secondary btn-clear" style="padding: 10px 18px; border-radius: 10px; font-weight: 600; cursor: pointer;">Limpiar</button>
-                            <button type="button" id="btn-analyze-email" class="btn-primary-action" style="padding: 10px 22px; border-radius: 10px; font-weight: 700; cursor: pointer;">Ejecutar Analisis de Seguridad</button>
+                            <button type="button" id="btn-analyze-email" class="btn-primary-action" style="padding: 10px 22px; border-radius: 10px; font-weight: 700; cursor: pointer;">Ejecutar análisis de seguridad</button>
                         </div>
                     </div>
                 </div>
 
                 <div class="card" style="margin-bottom: 0;">
                     <div class="card-title">
-                        <span>Panel de Extraccion de Metricas</span>
-                        <span class="badge-counter">Variables de Dominio</span>
+                        <span>Panel de extracción de métricas</span>
+                        <span class="badge-counter">Variables de dominio</span>
                     </div>
 
                     <div class="metrics-grid">
                         <div class="metric-tile">
-                            <div class="metric-key">Total de Caracteres</div>
+                            <div class="metric-key">Total de caracteres</div>
                             <div class="metric-value" id="val-char-count">-</div>
                             <div class="metric-desc">Longitud total del mensaje</div>
                         </div>
                         <div class="metric-tile">
-                            <div class="metric-key">Enlaces Detectados</div>
+                            <div class="metric-key">Enlaces detectados</div>
                             <div class="metric-value" id="val-url-count">-</div>
                             <div class="metric-desc">Direcciones web encontradas</div>
                         </div>
                         <div class="metric-tile">
-                            <div class="metric-key">Contiene Enlaces</div>
+                            <div class="metric-key">Contiene enlaces</div>
                             <div class="metric-value" id="val-has-url">-</div>
-                            <div class="metric-desc">Presencia de hipervinculos</div>
+                            <div class="metric-desc">Presencia de hipervínculos</div>
                         </div>
                         <div class="metric-tile">
-                            <div class="metric-key">Nivel de Urgencia</div>
+                            <div class="metric-key">Nivel de urgencia</div>
                             <div class="metric-value" id="val-urgency-score">-</div>
-                            <div class="metric-desc">Puntaje de coaccion calculado</div>
+                            <div class="metric-desc">Puntaje de coacción calculado</div>
                         </div>
                         <div class="metric-tile">
-                            <div class="metric-key">Densidad de Enlaces</div>
+                            <div class="metric-key">Densidad de enlaces</div>
                             <div class="metric-value" id="val-url-density">-</div>
-                            <div class="metric-desc">Proporcion respecto al texto</div>
+                            <div class="metric-desc">Proporción respecto al texto</div>
                         </div>
                         <div class="metric-tile">
-                            <div class="metric-key">Densidad de Urgencia</div>
+                            <div class="metric-key">Densidad de urgencia</div>
                             <div class="metric-value" id="val-urgency-density">-</div>
-                            <div class="metric-desc">Frecuencia de terminos de alerta</div>
+                            <div class="metric-desc">Frecuencia de términos de alerta</div>
                         </div>
                         <div class="metric-tile" id="tile-is-threat">
-                            <div class="metric-key">Veredicto del Sistema</div>
+                            <div class="metric-key">Veredicto del sistema</div>
                             <div class="metric-value" id="val-is-threat">-</div>
-                            <div class="metric-desc">Clasificacion del modelo</div>
+                            <div class="metric-desc">Clasificación del modelo</div>
                         </div>
                     </div>
                 </div>
 
                 <div class="card" style="margin-bottom: 0;">
                     <div class="card-title">
-                        <span>Panel de Diagnostico Predictivo</span>
+                        <span>Panel de diagnóstico predictivo</span>
                         <span class="badge-counter">Inferencia ML</span>
                     </div>
 
                     <div class="diagnostic-box">
                         <div id="verdict-banner" class="verdict-banner" style="background-color: #F8FAFD; border-color: #DDE8F4; color: #64748B;">
                             <div class="verdict-info">
-                                <h3 id="verdict-title">Esperando Analisis</h3>
-                                <p id="verdict-desc">Ingrese un correo para activar el motor.</p>
+                                <h3 id="verdict-title">Esperando análisis</h3>
+                                <p id="verdict-desc">Ingresa un correo para activar el motor.</p>
                             </div>
                             <div id="verdict-risk-pill" class="risk-pill" style="background-color: #E2E8F0; color: #475569;">
                                 INACTIVO
@@ -249,7 +248,7 @@ Haga clic sobre cualquiera de los correos de la bandeja para desplegar su conten
 
                         <div>
                             <div class="progress-labels">
-                                <span>Probabilidad de Amenaza Calculada</span>
+                                <span>Probabilidad de amenaza calculada</span>
                                 <span id="prob-value-text">0.0%</span>
                             </div>
                             <div class="progress-track">
@@ -265,30 +264,30 @@ Haga clic sobre cualquiera de los correos de la bandeja para desplegar su conten
         <section id="tab-soc" class="tab-panel">
             <div class="card">
                 <div class="card-title">
-                    <span>Historial de Correos Analizados por el Usuario</span>
-                    <span class="badge-counter">Registro de Consultas</span>
+                    <span>Historial de correos analizados por el usuario</span>
+                    <span class="badge-counter">Registro de consultas</span>
                 </div>
 
                 <p style="font-size: 14px; color: #64748B; margin-bottom: 20px; line-height: 1.6;">
-                    Registro cronologico de correos evaluados mediante el motor de aprendizaje automatico. Proporciona trazabilidad inmediata del veredicto y las recomendaciones preventivas para el usuario sin intermediacion de terceros.
+                    Registro cronológico de correos evaluados mediante el motor de aprendizaje automático. Proporciona trazabilidad inmediata del veredicto y las recomendaciones preventivas para el usuario sin intermediación de terceros.
                 </p>
 
                 <div class="data-table-container">
                     <table class="custom-table">
                         <thead>
                             <tr>
-                                <th>ID Analisis</th>
-                                <th>Remitente Anonimizado</th>
-                                <th>Fecha y Hora</th>
+                                <th>ID análisis</th>
+                                <th>Remitente anonimizado</th>
+                                <th>Fecha y hora</th>
                                 <th>Confianza IA</th>
-                                <th>Nivel Alerta</th>
+                                <th>Nivel de alerta</th>
                                 <th>Veredicto</th>
-                                <th>Recomendacion al Usuario</th>
+                                <th>Recomendación al usuario</th>
                             </tr>
                         </thead>
                         <tbody id="soc-incidents-tbody">
                             <tr>
-                                <td colspan="7" class="empty-state">Cargando historial de analisis del sistema...</td>
+                                <td colspan="7" class="empty-state">Cargando historial de análisis del sistema...</td>
                             </tr>
                         </tbody>
                     </table>
