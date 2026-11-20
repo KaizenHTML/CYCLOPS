@@ -63,6 +63,16 @@
 
                 <div style="display: flex; flex-direction: column; gap: 24px;">
 
+                    <div class="card" style="margin-bottom: 0; padding: 18px 24px; display: flex; justify-content: space-between; align-items: center; border-radius: 20px; box-shadow: 0 4px 16px #9bbcdb1c;">
+                        <div>
+                            <span style="font-weight: 700; color: #1E293B; font-size: 15px;">Modulo de Inferencia del Escudo</span>
+                            <p style="font-size: 13px; color: #64748B; margin: 4px 0 0 0;">Ejecute la auditoria en tiempo real sobre el mensaje seleccionado</p>
+                        </div>
+                        <button type="button" id="btn-inbox-run-analysis" class="btn-primary" style="padding: 12px 24px; font-size: 14px; font-weight: 700; border-radius: 12px; background-color: #2E75D3; color: #FFFFFF; border: none; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                            &#9889; Ejecutar Analisis de Seguridad
+                        </button>
+                    </div>
+
                     <div class="reading-pane" id="reading-pane" style="margin-bottom: 0;">
                         <div class="reading-header">
                             <h2 class="reading-subject" id="reading-subject">Seleccione un correo para auditar</h2>
@@ -74,12 +84,6 @@
 
                         <div class="reading-body" id="reading-body">
 Haga clic sobre cualquiera de los correos de la bandeja para desplegar su contenido completo e iniciar la auditoria del escudo CYCLOPS en tiempo real.
-                        </div>
-
-                        <div style="display: flex; justify-content: flex-end; margin-top: 14px;">
-                            <button type="button" id="btn-inbox-run-analysis" class="btn-primary" style="padding: 12px 24px; font-size: 14px; font-weight: 700; border-radius: 12px; background-color: #2E75D3; color: #FFFFFF; border: none; cursor: pointer; display: flex; align-items: center; gap: 8px;">
-                                &#9889; Ejecutar Analisis de Seguridad
-                            </button>
                         </div>
                     </div>
 

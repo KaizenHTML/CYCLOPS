@@ -873,8 +873,6 @@ body {
     display: flex;
     flex-direction: column;
     gap: 18px;
-    max-height: 720px;
-    overflow-y: auto;
 }
 
 .reading-header {
@@ -907,6 +905,8 @@ body {
     color: #1E293B;
     white-space: pre-wrap;
     word-break: break-word;
+    max-height: 280px;
+    overflow-y: auto;
 }
 
 .shield-panel {
